@@ -1,18 +1,22 @@
-package com.example.messenger
+package com.example.messenger.LoginScreen
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.MediaStore
-import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.Log
 import android.widget.Toast
+import com.example.messenger.R
+import com.example.messenger.messages.MessengerActivity
+import com.example.messenger.oldUser.LogIn
+import com.example.messenger.oldUser.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -27,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         }
         // moving to old user screen
         old_user.setOnClickListener {
-            val intent= Intent(this,LogIn::class.java)
+            val intent= Intent(this, LogIn::class.java)
             startActivity(intent)
         }
         //handling the rounded button
@@ -68,6 +72,7 @@ class MainActivity : AppCompatActivity() {
             if(!it.isSuccessful) {
                 return@addOnCompleteListener
             }
+            Toast.makeText(this,"Please wait ...",Toast.LENGTH_SHORT).show()
             uploadImageToFireBaseStorage()
 
 
@@ -100,11 +105,16 @@ class MainActivity : AppCompatActivity() {
         val uid= FirebaseAuth.getInstance().uid ?: ""
         val ref=FirebaseDatabase.getInstance().getReference("/users/$uid")
 
-        var user=User(uid,Username.text.toString(),uri)
+        val user= User(uid, Username.text.toString(), uri)
 
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d("important","finally we saved the user to the database")
+                val intent=Intent(this,
+                    MessengerActivity::class.java)
+                intent.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+
             }
             .addOnFailureListener{
                 Log.d("important","database porblem")
@@ -113,5 +123,4 @@ class MainActivity : AppCompatActivity() {
 
     }
 }
-class User(val uid:String,val username : String , val profileimageurl : String )
 

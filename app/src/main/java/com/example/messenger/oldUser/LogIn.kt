@@ -1,12 +1,13 @@
-package com.example.messenger
+package com.example.messenger.oldUser
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.messenger.R
+import com.example.messenger.messages.MessengerActivity
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.new_login.*
 
 class LogIn : AppCompatActivity() {
@@ -32,6 +33,10 @@ class LogIn : AppCompatActivity() {
                 if(!it.isSuccessful)return@addOnCompleteListener
 
                 Log.d("important","user is successfully log in ${it.result}")
+                val intent= Intent(this,
+                    MessengerActivity::class.java)
+                intent.flags= Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
             }
                 .addOnCanceledListener {
                     Toast.makeText(this,"incorrect username or password",Toast.LENGTH_SHORT).show()
