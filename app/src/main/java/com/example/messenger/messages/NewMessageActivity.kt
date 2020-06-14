@@ -3,6 +3,7 @@ package com.example.messenger.messages
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.messenger.R
 import com.example.messenger.oldUser.User
 import com.google.firebase.database.DataSnapshot
@@ -22,6 +23,8 @@ class NewMessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
         supportActionBar?.title= "Select User"
+
+        recyclerview_message.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
 
         fetchUsers()
 

@@ -24,7 +24,7 @@
         android:background="@drawable/curves"
         android:maxWidth="240dp"
         android:padding="16dp"
-        android:text="This lfjasdlfj;ja "
+        android:text=""
         app:layout_constraintStart_toEndOf="@+id/image_chat_from_row"
         app:layout_constraintTop_toTopOf="@+id/image_chat_from_row" />
 

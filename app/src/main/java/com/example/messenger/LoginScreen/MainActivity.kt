@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         }
         //handling the rounded button
         profile_image_button.setOnClickListener {
-            Log.d("important","try to show photo selector")
             val intent=Intent(Intent.ACTION_PICK)
             intent.type="image/*"
             startActivityForResult(intent,0)
@@ -47,7 +46,6 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode==0 && resultCode== Activity.RESULT_OK && data != null){
-            Log.d("important","image is set")
         }
         selectedpicuri =data?.data
         if(selectedpicuri == null)
@@ -66,8 +64,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,"enter email and password both",Toast.LENGTH_SHORT).show()
             return
         }
-        Log.d("important","username= $username")
-        Log.d("important","Email= $email")
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password).addOnCompleteListener{
             if(!it.isSuccessful) {
                 return@addOnCompleteListener
@@ -78,7 +74,6 @@ class MainActivity : AppCompatActivity() {
 
 
         }.addOnFailureListener {
-            Log.d("important","ki yar")
             Toast.makeText(this@MainActivity,"email or password is already taken",Toast.LENGTH_SHORT).show()
             return@addOnFailureListener
 
@@ -90,14 +85,12 @@ class MainActivity : AppCompatActivity() {
         val ref=FirebaseStorage.getInstance().getReference("/images/$filename")
         ref.putFile(selectedpicuri!!)
             .addOnSuccessListener {
-                Log.d("important","image has been uploaded ${it.metadata?.path}")
 
                 ref.downloadUrl.addOnSuccessListener {
-                    Log.d("important","file location is $it")
                     saveUserToFireBaseDatabase(it.toString())
                 }
                     .addOnFailureListener{
-                        Log.d("important","Storage porblem")
+                        Toast.makeText(this,"something went wrong",Toast.LENGTH_SHORT).show()
                     }
             }
     }
@@ -109,7 +102,6 @@ class MainActivity : AppCompatActivity() {
 
         ref.setValue(user)
             .addOnSuccessListener {
-                Log.d("important","finally we saved the user to the database")
                 val intent=Intent(this,
                     MessengerActivity::class.java)
                 intent.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -117,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 
             }
             .addOnFailureListener{
-                Log.d("important","database porblem")
+                Toast.makeText(this,"something went wrong",Toast.LENGTH_SHORT).show()
 
             }
 

@@ -2,10 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/newMessage_option"
+    <item
+        android:id="@+id/newMessage_option"
+        android:icon="@drawable/new_message"
         android:title="newMessage"
-        app:showAsAction="ifRoom"/>
-    <item android:id="@+id/Sign_Out_option"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/Sign_Out_option"
+        android:icon="@drawable/signout2"
         android:title="SignOut"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 </menu>

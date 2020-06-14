@@ -31,14 +31,13 @@ class LogIn : AppCompatActivity() {
             }
             FirebaseAuth.getInstance().signInWithEmailAndPassword(Known_Email,Known_Password).addOnCompleteListener{
                 if(!it.isSuccessful)return@addOnCompleteListener
-
-                Log.d("important","user is successfully log in ${it.result}")
+                Toast.makeText(this,"Please wait...",Toast.LENGTH_SHORT).show()
                 val intent= Intent(this,
                     MessengerActivity::class.java)
                 intent.flags= Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
-                .addOnCanceledListener {
+                .addOnFailureListener {
                     Toast.makeText(this,"incorrect username or password",Toast.LENGTH_SHORT).show()
 
                 }

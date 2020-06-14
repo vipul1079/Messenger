@@ -87,6 +87,7 @@ class RandomUser : AppCompatActivity() {
                         adapter.add(ChatToItem(chatmessage.text,toUser!!))
                     }
                 }
+                recyclerview_chatlog_random.scrollToPosition(adapter.itemCount-1)
             }
 
             override fun onChildRemoved(p0: DataSnapshot) {
@@ -113,12 +114,17 @@ class RandomUser : AppCompatActivity() {
 
         val chatmessage=ChatMessage(reference.key!!,text,fromId,toId,System.currentTimeMillis()/1000)
         reference.setValue(chatmessage).addOnSuccessListener {
-            Log.d(TAG,"sending message to the other person ${reference.key}")
             chat_log_typing.text.clear()
             recyclerview_chatlog_random.scrollToPosition(adapter.itemCount-1)
 
         }
         toreference.setValue(chatmessage)
+
+        val latest_reference=FirebaseDatabase.getInstance().getReference("/latest-message/$fromId/$toId")
+        latest_reference.setValue(chatmessage)
+
+        val latest_reference2=FirebaseDatabase.getInstance().getReference("/latest-message/$toId/$fromId")
+        latest_reference.setValue(chatmessage)
     }
 }
 /// now i dont want to make more changes to this code so leaving this as it is as long as it works but here i accidentally made the
