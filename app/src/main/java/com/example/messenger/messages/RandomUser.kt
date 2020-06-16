@@ -2,9 +2,8 @@ package com.example.messenger.messages
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import com.example.messenger.R
+import com.example.messenger.oldUser.ChatMessage
 import com.example.messenger.oldUser.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
@@ -20,10 +19,6 @@ import kotlinx.android.synthetic.main.chat_from_row.view.*
 import kotlinx.android.synthetic.main.chat_to_row.view.*
 
 class RandomUser : AppCompatActivity() {
-
-    companion object{
-        val TAG="ChatLog"
-    }
     val adapter= GroupAdapter<ViewHolder>()
 
     var toUser:User?=null
@@ -46,11 +41,9 @@ class RandomUser : AppCompatActivity() {
             performSendMessage()
 
         }
+
     }
 
-    class ChatMessage(val id:String,val text:String,val fromId:String,val toId:String,val timeStamp:Long){
-        constructor():this("","","","",-1)
-    }
 
 
 
@@ -79,11 +72,9 @@ class RandomUser : AppCompatActivity() {
                 if(chatmessage !=null){
 
                     if(chatmessage.fromId== FirebaseAuth.getInstance().uid) {
-                        Log.d(TAG,chatmessage.text)
                         val currentUser=MessengerActivity.currentUser
                         adapter.add(ChatFromItem(chatmessage.text,currentUser!!))
                     }else{
-                        Log.d(TAG,chatmessage.text+"fadfafa")
                         adapter.add(ChatToItem(chatmessage.text,toUser!!))
                     }
                 }
@@ -120,11 +111,11 @@ class RandomUser : AppCompatActivity() {
         }
         toreference.setValue(chatmessage)
 
-        val latest_reference=FirebaseDatabase.getInstance().getReference("/latest-message/$fromId/$toId")
-        latest_reference.setValue(chatmessage)
+        val latestreference=FirebaseDatabase.getInstance().getReference("/latest-message/$fromId/$toId")
+        latestreference.setValue(chatmessage)
 
-        val latest_reference2=FirebaseDatabase.getInstance().getReference("/latest-message/$toId/$fromId")
-        latest_reference.setValue(chatmessage)
+        val latestreference2=FirebaseDatabase.getInstance().getReference("/latest-message/$toId/$fromId")
+        latestreference2.setValue(chatmessage)
     }
 }
 /// now i dont want to make more changes to this code so leaving this as it is as long as it works but here i accidentally made the
@@ -137,7 +128,9 @@ class ChatFromItem(val text:String,val user: User): Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.chat_user_to.text=text
+
         Picasso.get().load(user.profileimageurl).into(viewHolder.itemView.image_chat_to_row)
+
 
     }
 }

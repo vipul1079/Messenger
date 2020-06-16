@@ -12,7 +12,7 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.recent_chat_row.view.*
 
-class RecentUsers(val chatmessage: RandomUser.ChatMessage) : Item<ViewHolder>(){
+class RecentUsers(val chatmessage: ChatMessage) : Item<ViewHolder>(){
 
     var chatPartner: User?=null
 

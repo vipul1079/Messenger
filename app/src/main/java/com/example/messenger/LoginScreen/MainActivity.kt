@@ -2,6 +2,7 @@ package com.example.messenger.LoginScreen
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,6 +22,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    companion object{
+        var bitmap : Bitmap?=null
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +55,8 @@ class MainActivity : AppCompatActivity() {
         selectedpicuri =data?.data
         if(selectedpicuri == null)
             return
-        val Bitmap= MediaStore.Images.Media.getBitmap(contentResolver,selectedpicuri)
-        circularview_showimage.setImageBitmap(Bitmap)
+        bitmap= MediaStore.Images.Media.getBitmap(contentResolver,selectedpicuri)
+        circularview_showimage.setImageBitmap(bitmap)
         profile_image_button.alpha=0f
     }
 

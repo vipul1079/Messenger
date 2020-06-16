@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.messenger.LoginScreen.MainActivity
 import com.example.messenger.R
+import com.example.messenger.oldUser.ChatMessage
 import com.example.messenger.oldUser.RecentUsers
 import com.example.messenger.oldUser.User
 
@@ -31,6 +32,9 @@ class MessengerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messenger_mainscreen)
+        verifiedUserLoggedIn()
+        fetchCurrentUser()
+        listenforlatestmessages()
 
 
         //clicking on a user in the recent chat log
@@ -48,14 +52,14 @@ class MessengerActivity : AppCompatActivity() {
         recyclerview_recent_chats.adapter=adapter
 
         recyclerview_recent_chats.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
-        listenforlatestmessages()
 
-        fetchCurrentUser()
 
-        verifiedUserLoggedIn()
+
+
+
 
         }
-    val latestmessagesmap=HashMap<String,RandomUser.ChatMessage>()
+    val latestmessagesmap=HashMap<String,ChatMessage>()
 
     private fun refreshlatestmessage(){
         adapter.clear()
@@ -79,14 +83,14 @@ class MessengerActivity : AppCompatActivity() {
             }
 
             override fun onChildChanged(p0: DataSnapshot, p1: String?) {
-                val chatMessage=p0.getValue(RandomUser.ChatMessage::class.java) ?: return
+                val chatMessage=p0.getValue(ChatMessage::class.java) ?: return
                 latestmessagesmap[p0.key!!]=chatMessage
                 refreshlatestmessage()
 
             }
 
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
-                val chatMessage=p0.getValue(RandomUser.ChatMessage::class.java) ?: return
+                val chatMessage=p0.getValue(ChatMessage::class.java) ?: return
                 latestmessagesmap[p0.key!!]=chatMessage
                 refreshlatestmessage()
             }
