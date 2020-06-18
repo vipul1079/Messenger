@@ -1,7 +1,9 @@
 package com.example.messenger.messages
 
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.messenger.R
 import com.example.messenger.oldUser.ChatMessage
 import com.example.messenger.oldUser.User
@@ -15,6 +17,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_random_user.*
+import kotlinx.android.synthetic.main.activity_random_user.view.*
 import kotlinx.android.synthetic.main.chat_from_row.view.*
 import kotlinx.android.synthetic.main.chat_to_row.view.*
 
@@ -27,6 +30,15 @@ class RandomUser : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_random_user)
+        recyclerview_chatlog_random.setItemViewCacheSize(20)
+
+        recyclerview_chatlog_random.setHasFixedSize(true)
+        val simpleItemAnimator: SimpleItemAnimator = recyclerview_chatlog_random.itemAnimator as SimpleItemAnimator
+        simpleItemAnimator.supportsChangeAnimations=false
+
+
+
+
 
         recyclerview_chatlog_random.adapter=adapter
 
@@ -129,7 +141,14 @@ class ChatFromItem(val text:String,val user: User): Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.chat_user_to.text=text
 
-        Picasso.get().load(user.profileimageurl).into(viewHolder.itemView.image_chat_to_row)
+        //load user image to the chat log
+        if(user.profileimageurl !=" ") {
+            Picasso.get().load(user.profileimageurl).config(Bitmap.Config.RGB_565).placeholder(R.drawable.loading).priority(Picasso.Priority.HIGH)
+                .into(viewHolder.itemView.image_chat_to_row)
+        }else{
+            viewHolder.itemView.image_chat_to_row.setImageResource(R.drawable.avatar1)
+
+        }
 
 
     }
@@ -144,8 +163,13 @@ class ChatToItem(val text:String,val user: User): Item<ViewHolder>(){
             viewHolder.itemView.chat_user_from.text=text
 
             //load user image to the chat log
-            Picasso.get().load(user.profileimageurl).into(viewHolder.itemView.image_chat_from_row)
+            if(user.profileimageurl !=" ") {
+                Picasso.get().load(user.profileimageurl).config(Bitmap.Config.RGB_565).placeholder(R.drawable.loading).priority(Picasso.Priority.HIGH)
+                    .into(viewHolder.itemView.image_chat_from_row)
+            }else{
+                viewHolder.itemView.image_chat_from_row.setImageResource(R.drawable.avatar1)
 
+            }
         }
 
 }

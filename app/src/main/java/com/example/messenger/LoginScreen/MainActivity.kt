@@ -30,6 +30,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        profile_image_button.alpha=0f
+
+        circularview_showimage.setImageResource(R.drawable.avatar1)
+
+
         // perform registration
         register.setOnClickListener{
            register()
@@ -50,14 +56,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode==0 && resultCode== Activity.RESULT_OK && data != null){
-        }
-        selectedpicuri =data?.data
-        if(selectedpicuri == null)
+        if(data?.data == null){
             return
-        bitmap= MediaStore.Images.Media.getBitmap(contentResolver,selectedpicuri)
-        circularview_showimage.setImageBitmap(bitmap)
-        profile_image_button.alpha=0f
+        }else{
+            selectedpicuri =data.data
+            bitmap= MediaStore.Images.Media.getBitmap(contentResolver,selectedpicuri)
+            circularview_showimage.setImageBitmap(bitmap)
+        }
+
     }
 
 
@@ -85,19 +91,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun uploadImageToFireBaseStorage(){
-        if( selectedpicuri == null)return
-        val filename= UUID.randomUUID().toString()
-        val ref=FirebaseStorage.getInstance().getReference("/images/$filename")
-        ref.putFile(selectedpicuri!!)
-            .addOnSuccessListener {
+        if( selectedpicuri == null){
+            saveUserToFireBaseDatabase(" ")
+        }else{
+            val filename= UUID.randomUUID().toString()
+            val ref=FirebaseStorage.getInstance().getReference("/images/$filename")
+            ref.putFile(selectedpicuri!!)
+                .addOnSuccessListener {
 
-                ref.downloadUrl.addOnSuccessListener {
-                    saveUserToFireBaseDatabase(it.toString())
-                }
-                    .addOnFailureListener{
-                        Toast.makeText(this,"something went wrong",Toast.LENGTH_SHORT).show()
+                    ref.downloadUrl.addOnSuccessListener {
+                        saveUserToFireBaseDatabase(it.toString())
                     }
-            }
+                        .addOnFailureListener{
+                            Toast.makeText(this,"something went wrong",Toast.LENGTH_SHORT).show()
+                        }
+                }
+
+        }
+
     }
     private fun saveUserToFireBaseDatabase(uri:String){
         val uid= FirebaseAuth.getInstance().uid ?: ""

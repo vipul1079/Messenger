@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.messenger.LoginScreen.MainActivity
 import com.example.messenger.R
 import com.example.messenger.oldUser.ChatMessage
@@ -32,6 +33,9 @@ class MessengerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messenger_mainscreen)
+        recyclerview_recent_chats.setItemViewCacheSize(20)
+        val simpleItemAnimator: SimpleItemAnimator = recyclerview_recent_chats.itemAnimator as SimpleItemAnimator
+        simpleItemAnimator.supportsChangeAnimations=false
         verifiedUserLoggedIn()
         fetchCurrentUser()
         listenforlatestmessages()
@@ -47,6 +51,8 @@ class MessengerActivity : AppCompatActivity() {
             intent.putExtra(NewMessageActivity.USER_KEY,row.chatPartner)
             startActivity(intent)
         }
+        recyclerview_recent_chats.setHasFixedSize(true)
+
 
 
         recyclerview_recent_chats.adapter=adapter

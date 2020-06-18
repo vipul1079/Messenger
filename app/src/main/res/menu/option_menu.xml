@@ -12,4 +12,5 @@
         android:icon="@drawable/signout2"
         android:title="SignOut"
         app:showAsAction="ifRoom" />
+
 </menu>
